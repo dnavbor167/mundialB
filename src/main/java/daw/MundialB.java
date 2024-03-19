@@ -11,6 +11,6 @@ package daw;
 public class MundialB {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        metodosMundialB.salida();
     }
 }

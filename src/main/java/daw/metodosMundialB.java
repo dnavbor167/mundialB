@@ -18,27 +18,17 @@ import java.util.Scanner;
  * @author daniel
  */
 public class metodosMundialB {
-    public static void escribir() {
+
+    //método para escribir en el fichero "idfichero"
+    public static void escribir(String escribir) {
         String idFichero = "salida.txt";
-        Scanner sc = new Scanner(System.in);
-        String pregunta = "";
-        //este bucle se va a repetir hasta que llegue a la letra fin
-        do {
-            //le preguntamos al usuario que introduzca algo que añadir al texto
-            System.out.println("Introduce la línea que quieres añadir");
-            pregunta = sc.nextLine();
+        try {
+            Files.write(Paths.get(idFichero), (escribir + "\n").getBytes(StandardCharsets.UTF_8),
+                    StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND);
+        } catch (IOException ex) {
+            System.out.println("Error creando el fichero");
+        }
 
-            if (!pregunta.equalsIgnoreCase("fin")) {
-                try {
-                    Files.write(Paths.get(idFichero), (pregunta + "\n").getBytes(StandardCharsets.UTF_8),
-                            StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-                } catch (IOException ex) {
-                    System.out.println("Error creando el fichero");
-                }
-            }
-
-        } while (!pregunta.equalsIgnoreCase("fin"));
-        
     }
 
     //método para leer un fichero de texto plano
@@ -55,33 +45,30 @@ public class metodosMundialB {
         lista.remove(0);
         return lista;
     }
-    
-    //método para pasarle una lista y devuelve una matriz
-    public static int[][] matrizEntrada() {
+
+    //método para pasarle una lista y escribe en el fichero de salida
+    public static void salida() {
+        //le paso la lista + leer fichero para que lo guarde en la lista
         List<String> lista = leerFichero();
-        int[][] matInt = new int[lista.size()-1][6];
-       
-        for (int i = 0; i < matInt.length; i++) {
-             String[] valor = lista.get(i).split("\\s");
-            for (int j = 0; j < matInt[i].length; j++) {
-                matInt[i][j] = Integer.parseInt(valor[j]);
+        //bucle for para que vaya recorriendo cada línea de la lista
+        for (int i = 0; i < lista.size(); i++) {
+            //array de String y guarda la línea i de la lista y en cada hueco
+            //del array se guarda hasta un espacio
+            String[] array = lista.get(i).split("\\s");
+            //sumaResta, esta variable suma las 6 votaciones y se lo resta
+            //a las votaciones totales que han de haber
+            int suma = (Integer.parseInt(array[1]) + Integer.parseInt(array[2])
+                    + Integer.parseInt(array[3]) + Integer.parseInt(array[4])
+                    + Integer.parseInt(array[5]) + Integer.parseInt(array[6]));
+
+            //si hay menos votaciones se ejecuta este código
+            if (Integer.parseInt(array[0]) < suma) {
+                escribir("hay más votaciones de lo permitido");
+            } else {
+                String guardar = String.valueOf(suma);
+                escribir(guardar);
             }
+
         }
-        return matInt;
-    }
-    
-    //método para comprobar que mira si cumple que la suma de los 
-    //números no sea superior al valor 0
-    public static boolean comprobar() {
-        int[][] compro = matrizEntrada();
-        int temporal;
-        
-        for (int i = 0; i < compro.length; i++) {
-            temporal = compro[i][1] + compro[i][2] + compro[i][3] + compro[i][4] + compro[i][5] + compro[i][6];
-            if (temporal > compro[i][0]) {
-                return false;
-            }
-        }
-        return true;
     }
 }
