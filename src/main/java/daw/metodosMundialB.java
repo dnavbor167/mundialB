@@ -57,9 +57,15 @@ public class metodosMundialB {
             String[] array = lista.get(i).split("\\s");
             //sumaResta, esta variable suma las 6 votaciones y se lo resta
             //a las votaciones totales que han de haber
-            int suma = (Integer.parseInt(array[1]) + Integer.parseInt(array[2])
-                    + Integer.parseInt(array[3]) + Integer.parseInt(array[4])
-                    + Integer.parseInt(array[5]) + Integer.parseInt(array[6]));
+            int suma = 0;
+            
+            for (int j = 0; j < array.length; j++) {
+                suma += Integer.parseInt(array[j]);
+            }
+            
+//             suma = (Integer.parseInt(array[1]) + Integer.parseInt(array[2])
+//                    + Integer.parseInt(array[3]) + Integer.parseInt(array[4])
+//                    + Integer.parseInt(array[5]) + Integer.parseInt(array[6]));
 
             //si hay menos votaciones se ejecuta este código
             if (Integer.parseInt(array[0]) < suma) {
